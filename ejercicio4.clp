@@ -1,7 +1,4 @@
 (deffacts ejercicio(brazo pila1 C B A pila2 E D mesa C E)
-(pila C B A)
-(pila E D)
-(mesa C E)
 )
 
 (defrule meta
@@ -11,35 +8,49 @@
 )
 
 (defrule coger-bloque-pila1
-?f1 <- (brazo pila1 ?x $?fin pila2 $?ini2 mesa $?iniM ?x $?finM)
+?f1 <- (brazo pila1 ?x pila2 $?ini2 mesa $iniM)
 =>
-(assert (brazo ?x pila1 $?fin pila2 $?ini2 mesa $?iniM $?finM))
+(assert (brazo ?x pila1 pila2 $?ini2 mesa $iniM))
 )
 
 (defrule coger-bloque-pila2
-?f1 <- (brazo pila1 $?ini1 pila2 $?ini2 ?x $?fin2 mesa $?iniM ?x $?finM)
+?f1 <- (brazo pila1 $?ini1 pila2 ?x mesa $iniM)
 =>
-(assert (brazo ?x pila1 $?ini1 pila2 $?ini2 $?fin2 mesa $?iniM $?finM))
+(assert (brazo ?x pila1 $?ini1 pila2 mesa $iniM))
 )
 
 (defrule dejar-bloque-pila1
-?f1 <- (brazo ?x pila1 $ini1 pila2 $?ini2 mesa $?iniM)
+?f1 <- (brazo ?x pila1 pila2 $?ini2 mesa $iniM)
 =>
-(assert (brazo pila1 $?ini1 ?x pila2 $?ini2 mesa $?ini ?x))
+(assert (brazo pila1 ?x pila2 $?ini2 mesa $iniM))
 )
 
-(defrule apilar-bloque
-?f1 <- (brazo ?x)
-?f2 <- (pila $?ini )
+(defrule dejar-bloque-pila2
+?f1 <- (brazo ?x pila1 $?ini1 pila2)
 =>
-(assert (brazo ))
-(assert (pila $?ini ?x))
+(assert (brazo pila1 $?ini1 pila2 ?x))
 )
 
-(defrule desapilar-bloque
-?f1 <- (brazo )
-?f2 <- (pila $?ini ?x)
+(defrule apilar-bloque-pila1
+?f1 <- (brazo ?x pila1 $?ini1 pila2 $?ini2)
 =>
-(assert (brazo ?x))
-(assert (pila $?ini))
+(assert (brazo pila1 $?ini1 ?x pila2 $?ini2))
+)
+
+(defrule desapilar-bloque-pila1
+?f1 <- (brazo pila1 $?ini1 ?x pila2 $?ini2)
+=>
+(assert (brazo ?x pila1 $?ini1 pila2 $?ini2))
+)
+
+(defrule apilar-bloque-pila2
+?f1 <- (brazo ?x pila1 $?ini1 pila2 $?ini2)
+=>
+(assert (brazo pila1 $?ini1 pila2 $?ini2 ?x))
+)
+
+(defrule desapilar-bloque-pila2
+?f1 <- (brazo pila1 $?ini1 pila2 $?ini2 ?x)
+=>
+(assert (brazo ?x pila1 $?ini1 pila2 $?ini2))
 )
